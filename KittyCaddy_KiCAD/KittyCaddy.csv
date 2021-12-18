@@ -1,0 +1,10 @@
+Source:,C:\Users\kguerra\Desktop\Microcontroller\Kitty Caddy\KittyCaddy\KittyCaddy.sch,,,,,
+Date:,11/16/2021 9:16,,,,,
+Tool:,Eeschema (5.1.10)-1,,,,,
+Generator:,C:\Program Files\KiCad\bin\scripting\plugins/bom_csv_grouped_by_value_with_fp.py,,,,,
+Component Count:,17,,,,,
+Ref,Qnty,Value,Cmp name,Part Number,Description,Vendor
+"C1, C2, ",5,100uF,CP1,1572-1043-ND,"Polarized capacitor, US symbol",https://www.digikey.com/en/products/detail/illinois-capacitor/107CKH063M/5343973
+"C3, ",5,.1uF,C,56-1C10Z5U104M050B-ND,Unpolarized capacitor,https://www.digikey.com/en/products/detail/vishay-beyschlag-draloric-bc-components/1C10Z5U104M050B/7056991
+"J2, ",5,digikey:17HS13-1204S,Conn_01x04,WM4202-ND,"Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)",https://www.digikey.com/en/products/detail/molex/0022232041/26671
+"J3, ",5,digikey:OPB740WZ,Conn_01x05,WM4203-ND,"Generic connector, single row, 01x05, script generated (kicad-library-utils/schlib/autogen/connector/)",https://www.digikey.com/en/products/detail/molex/0022232051/26673

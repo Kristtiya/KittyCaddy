@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="D">
+  <design>
+    <source>C:\Users\kguerra\Desktop\Microcontroller\Kitty Caddy\KittyCaddy\KittyCaddy.sch</source>
+    <date>11/16/2021 9:16:19 AM</date>
+    <tool>Eeschema (5.1.10)-1</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title>Kitty Caddy</title>
+        <company>Kristtiya Guerra &amp; Co.</company>
+        <rev>Rev 1.0</rev>
+        <date>10/2/2021</date>
+        <source>KittyCaddy.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="U1">
+      <value>D24V3F5</value>
+      <footprint>KittyCaddy:D24V3F5</footprint>
+      <fields>
+        <field name="Vendor">Polulu: https://www.pololu.com/product/2098</field>
+      </fields>
+      <libsource lib="KittyCaddy" part="Buck_5V" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>615C7451</tstamp>
+    </comp>
+    <comp ref="U2">
+      <value>DRV8825</value>
+      <footprint>Module:Pololu_Breakout-16_15.2x20.3mm</footprint>
+      <fields>
+        <field name="Vendor">https://www.pololu.com/product/2133</field>
+      </fields>
+      <libsource lib="KittyCaddy" part="DRV8825" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>615930B4</tstamp>
+    </comp>
+    <comp ref="SW1">
+      <value>SW_Push</value>
+      <footprint>KittyCaddy:DigikeyEG1833-ND</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Switch" part="SW_Push" description="Push button switch, generic, two pins"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>61633F35</tstamp>
+    </comp>
+    <comp ref="J1">
+      <value>12 V Power</value>
+      <footprint>Connector_BarrelJack:BarrelJack_Horizontal</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Vendor">https://www.pololu.com/product/1139</field>
+      </fields>
+      <libsource lib="Connector" part="Barrel_Jack_Switch" description="DC Barrel Jack with an internal switch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>615B0B5B</tstamp>
+    </comp>
+    <comp ref="J2">
+      <value>digikey:17HS13-1204S</value>
+      <footprint>Connector_Molex:Molex_KK-254_AE-6410-04A_1x04_P2.54mm_Vertical</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Vendor">https://www.digikey.com/en/products/detail/molex/0022232041/26671</field>
+      </fields>
+      <libsource lib="Connector_Generic" part="Conn_01x04" description="Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>615B252F</tstamp>
+    </comp>
+    <comp ref="U5">
+      <value>DS3231</value>
+      <footprint>KittyCaddy:DS3231</footprint>
+      <fields>
+        <field name="Vendor">https://www.adafruit.com/product/3013</field>
+      </fields>
+      <libsource lib="KittyCaddy" part="DS3231_Precision_RTC" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>615F9CC9</tstamp>
+    </comp>
+    <comp ref="J3">
+      <value>digikey:OPB740WZ</value>
+      <footprint>Connector_Molex:Molex_KK-254_AE-6410-05A_1x05_P2.54mm_Vertical</footprint>
+      <fields>
+        <field name="Vendor">https://www.digikey.com/en/products/detail/molex/0022232051/26673</field>
+      </fields>
+      <libsource lib="Connector_Generic" part="Conn_01x05" description="Generic connector, single row, 01x05, script generated (kicad-library-utils/schlib/autogen/connector/)"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>61600DB3</tstamp>
+    </comp>
+    <comp ref="R2">
+      <value>100</value>
+      <footprint>KittyCaddy:CFR-25JT-52-100R</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Vendor">https://www.digikey.com/en/products/detail/yageo/CFR-25JT-52-100R/13921496</field>
+      </fields>
+      <libsource lib="Device" part="R_US" description="Resistor, US symbol"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>615FFB3F</tstamp>
+    </comp>
+    <comp ref="U4">
+      <value>SSD1306_IIC_OLED_Display</value>
+      <footprint>KittyCaddy:IIC_Display</footprint>
+      <fields>
+        <field name="Vendor">https://www.amazon.com/dp/B08VNRH5HR</field>
+      </fields>
+      <libsource lib="KittyCaddy" part="SSD1306_IIC_OLED_Display" description=""/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>61595AE6</tstamp>
+    </comp>
+    <comp ref="C1">
+      <value>100uF</value>
+      <footprint>Capacitor_THT:CP_Radial_D8.0mm_P3.50mm</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Vendor">https://www.digikey.com/en/products/detail/illinois-capacitor/107CKH063M/5343973</field>
+      </fields>
+      <libsource lib="Device" part="CP1" description="Polarized capacitor, US symbol"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>61653AD0</tstamp>
+    </comp>
+    <comp ref="C2">
+      <value>100uF</value>
+      <footprint>Capacitor_THT:CP_Radial_D8.0mm_P3.50mm</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Vendor">https://www.digikey.com/en/products/detail/illinois-capacitor/107CKH063M/5343973</field>
+      </fields>
+      <libsource lib="Device" part="CP1" description="Polarized capacitor, US symbol"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>61660820</tstamp>
+    </comp>
+    <comp ref="U3">
+      <value>Arduino_Nano_v2.x</value>
+      <footprint>Module:Arduino_Nano</footprint>
+      <datasheet>https://www.arduino.cc/en/uploads/Main/ArduinoNanoManual23.pdf</datasheet>
+      <fields>
+        <field name="Vendor">https://www.amazon.com/gp/product/B0713XK923/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&amp;psc=1</field>
+      </fields>
+      <libsource lib="MCU_Module" part="Arduino_Nano_v2.x" description="Arduino Nano v2.x"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>61690B4B</tstamp>
+    </comp>
+    <comp ref="C3">
+      <value>.1uF</value>
+      <footprint>KittyCaddy:1C10Z5U104M050B</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Vendor">https://www.digikey.com/en/products/detail/vishay-beyschlag-draloric-bc-components/1C10Z5U104M050B/7056991</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>616AF0F2</tstamp>
+    </comp>
+    <comp ref="SW2">
+      <value>SW_Push</value>
+      <footprint>KittyCaddy:DigikeyEG1833-ND</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Switch" part="SW_Push" description="Push button switch, generic, two pins"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>616B840D</tstamp>
+    </comp>
+    <comp ref="SW3">
+      <value>SW_Push</value>
+      <footprint>KittyCaddy:DigikeyEG1833-ND</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Switch" part="SW_Push" description="Push button switch, generic, two pins"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>616B869B</tstamp>
+    </comp>
+    <comp ref="R1">
+      <value>10k</value>
+      <footprint>KittyCaddy:CF14JT10K0</footprint>
+      <datasheet>~</datasheet>
+      <fields>
+        <field name="Vendor">https://www.digikey.com/en/products/detail/stackpole-electronics-inc/CF14JT10K0/1741265</field>
+      </fields>
+      <libsource lib="Device" part="R_US" description="Resistor, US symbol"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>6160DC38</tstamp>
+    </comp>
+    <comp ref="J4">
+      <value>Ground Pin</value>
+      <footprint>Connector_Pin:Pin_D1.0mm_L10.0mm_LooseFit</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Connector_Generic" part="Conn_01x01" description="Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>61724687</tstamp>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="Connector" part="Barrel_Jack_Switch">
+      <description>DC Barrel Jack with an internal switch</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>BarrelJack*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Barrel_Jack_Switch</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+        <pin num="3" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Connector_Generic" part="Conn_01x01">
+      <description>Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Connector*:*_1x??_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn_01x01</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Pin_1" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Connector_Generic" part="Conn_01x04">
+      <description>Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Connector*:*_1x??_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn_01x04</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Pin_1" type="passive"/>
+        <pin num="2" name="Pin_2" type="passive"/>
+        <pin num="3" name="Pin_3" type="passive"/>
+        <pin num="4" name="Pin_4" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Connector_Generic" part="Conn_01x05">
+      <description>Generic connector, single row, 01x05, script generated (kicad-library-utils/schlib/autogen/connector/)</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Connector*:*_1x??_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn_01x05</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Pin_1" type="passive"/>
+        <pin num="2" name="Pin_2" type="passive"/>
+        <pin num="3" name="Pin_3" type="passive"/>
+        <pin num="4" name="Pin_4" type="passive"/>
+        <pin num="5" name="Pin_5" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="C">
+      <description>Unpolarized capacitor</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>C_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">C</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="CP1">
+      <description>Polarized capacitor, US symbol</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>CP_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">CP1</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="R_US">
+      <description>Resistor, US symbol</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>R_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">R_US</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="KittyCaddy" part="Buck_5V">
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">Buck_5V</field>
+      </fields>
+      <pins>
+        <pin num="1" name="VOUT" type="output"/>
+        <pin num="2" name="GND" type="BiDi"/>
+        <pin num="3" name="VIN" type="input"/>
+        <pin num="4" name="~SHDN" type="BiDi"/>
+      </pins>
+    </libpart>
+    <libpart lib="KittyCaddy" part="DRV8825">
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">DRV8825</field>
+      </fields>
+      <pins>
+        <pin num="1" name="GND" type="BiDi"/>
+        <pin num="2" name="~FAULT" type="BiDi"/>
+        <pin num="3" name="A2" type="BiDi"/>
+        <pin num="4" name="A1" type="BiDi"/>
+        <pin num="5" name="B1" type="BiDi"/>
+        <pin num="6" name="B2" type="BiDi"/>
+        <pin num="7" name="GND" type="BiDi"/>
+        <pin num="8" name="VMOT" type="BiDi"/>
+        <pin num="9" name="~ENABLE" type="input"/>
+        <pin num="10" name="M0" type="input"/>
+        <pin num="11" name="M1" type="input"/>
+        <pin num="12" name="M2" type="input"/>
+        <pin num="13" name="~RESET" type="input"/>
+        <pin num="14" name="~SLEEP" type="input"/>
+        <pin num="15" name="STEP" type="BiDi"/>
+        <pin num="16" name="DIR" type="BiDi"/>
+      </pins>
+    </libpart>
+    <libpart lib="KittyCaddy" part="DS3231_Precision_RTC">
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">DS3231_Precision_RTC</field>
+      </fields>
+      <pins>
+        <pin num="1" name="RST" type="BiDi"/>
+        <pin num="2" name="SQW" type="output"/>
+        <pin num="3" name="32K" type="output"/>
+        <pin num="4" name="VBAT" type="input"/>
+        <pin num="5" name="SDA" type="BiDi"/>
+        <pin num="6" name="SCL" type="BiDi"/>
+        <pin num="7" name="GND" type="BiDi"/>
+        <pin num="8" name="Vin" type="BiDi"/>
+      </pins>
+    </libpart>
+    <libpart lib="KittyCaddy" part="SSD1306_IIC_OLED_Display">
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">SSD1306_IIC_OLED_Display</field>
+      </fields>
+      <pins>
+        <pin num="1" name="GND" type="BiDi"/>
+        <pin num="2" name="VCC" type="BiDi"/>
+        <pin num="3" name="SCL" type="input"/>
+        <pin num="4" name="SDA" type="input"/>
+      </pins>
+    </libpart>
+    <libpart lib="MCU_Module" part="Arduino_Nano_v2.x">
+      <aliases>
+        <alias>Arduino_Nano_v3.x</alias>
+      </aliases>
+      <description>Arduino Nano v2.x</description>
+      <docs>https://www.arduino.cc/en/uploads/Main/ArduinoNanoManual23.pdf</docs>
+      <footprints>
+        <fp>Arduino*Nano*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">A</field>
+        <field name="Value">Arduino_Nano_v2.x</field>
+        <field name="Footprint">Module:Arduino_Nano</field>
+      </fields>
+      <pins>
+        <pin num="1" name="D1/TX" type="BiDi"/>
+        <pin num="2" name="D0/RX" type="BiDi"/>
+        <pin num="3" name="~RESET" type="input"/>
+        <pin num="4" name="GND" type="power_in"/>
+        <pin num="5" name="D2" type="BiDi"/>
+        <pin num="6" name="D3" type="BiDi"/>
+        <pin num="7" name="D4" type="BiDi"/>
+        <pin num="8" name="D5" type="BiDi"/>
+        <pin num="9" name="D6" type="BiDi"/>
+        <pin num="10" name="D7" type="BiDi"/>
+        <pin num="11" name="D8" type="BiDi"/>
+        <pin num="12" name="D9" type="BiDi"/>
+        <pin num="13" name="D10" type="BiDi"/>
+        <pin num="14" name="D11" type="BiDi"/>
+        <pin num="15" name="D12" type="BiDi"/>
+        <pin num="16" name="D13" type="BiDi"/>
+        <pin num="17" name="3V3" type="power_out"/>
+        <pin num="18" name="AREF" type="input"/>
+        <pin num="19" name="A0" type="BiDi"/>
+        <pin num="20" name="A1" type="BiDi"/>
+        <pin num="21" name="A2" type="BiDi"/>
+        <pin num="22" name="A3" type="BiDi"/>
+        <pin num="23" name="A4" type="BiDi"/>
+        <pin num="24" name="A5" type="BiDi"/>
+        <pin num="25" name="A6" type="BiDi"/>
+        <pin num="26" name="A7" type="BiDi"/>
+        <pin num="27" name="+5V" type="power_out"/>
+        <pin num="28" name="~RESET" type="input"/>
+        <pin num="29" name="GND" type="power_in"/>
+        <pin num="30" name="VIN" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="Switch" part="SW_Push">
+      <description>Push button switch, generic, two pins</description>
+      <docs>~</docs>
+      <fields>
+        <field name="Reference">SW</field>
+        <field name="Value">SW_Push</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="Connector">
+      <uri>C:\Program Files\KiCad\share\kicad\library/Connector.lib</uri>
+    </library>
+    <library logical="Connector_Generic">
+      <uri>C:\Program Files\KiCad\share\kicad\library/Connector_Generic.lib</uri>
+    </library>
+    <library logical="Device">
+      <uri>C:\Program Files\KiCad\share\kicad\library/Device.lib</uri>
+    </library>
+    <library logical="KittyCaddy">
+      <uri>C:\Users\kguerra\Desktop\Microcontroller\Kitty Caddy\KittyCaddy/KittyCaddy.lib</uri>
+    </library>
+    <library logical="MCU_Module">
+      <uri>C:\Program Files\KiCad\share\kicad\library/MCU_Module.lib</uri>
+    </library>
+    <library logical="Switch">
+      <uri>C:\Program Files\KiCad\share\kicad\library/Switch.lib</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="SLEEP">
+      <node ref="U3" pin="16"/>
+    </net>
+    <net code="2" name="Net-(C2-Pad2)">
+      <node ref="C2" pin="2"/>
+      <node ref="U2" pin="7"/>
+    </net>
+    <net code="3" name="Net-(U3-Pad1)">
+      <node ref="U3" pin="1"/>
+    </net>
+    <net code="4" name="Net-(U3-Pad13)">
+      <node ref="U3" pin="13"/>
+    </net>
+    <net code="5" name="RESET">
+      <node ref="U3" pin="15"/>
+    </net>
+    <net code="6" name="Net-(U3-Pad17)">
+      <node ref="U3" pin="17"/>
+    </net>
+    <net code="7" name="Net-(U3-Pad18)">
+      <node ref="U3" pin="18"/>
+    </net>
+    <net code="8" name="Net-(U3-Pad2)">
+      <node ref="U3" pin="2"/>
+    </net>
+    <net code="9" name="Net-(U3-Pad20)">
+      <node ref="U3" pin="20"/>
+    </net>
+    <net code="10" name="Net-(U3-Pad21)">
+      <node ref="U3" pin="21"/>
+    </net>
+    <net code="11" name="Net-(U3-Pad22)">
+      <node ref="U3" pin="22"/>
+    </net>
+    <net code="12" name="SDA">
+      <node ref="U4" pin="4"/>
+      <node ref="U3" pin="23"/>
+      <node ref="U5" pin="5"/>
+    </net>
+    <net code="13" name="SCL">
+      <node ref="U5" pin="6"/>
+      <node ref="U3" pin="24"/>
+      <node ref="U4" pin="3"/>
+    </net>
+    <net code="14" name="Net-(U3-Pad25)">
+      <node ref="U3" pin="25"/>
+    </net>
+    <net code="15" name="Net-(U3-Pad26)">
+      <node ref="U3" pin="26"/>
+    </net>
+    <net code="16" name="+12V">
+      <node ref="J1" pin="1"/>
+      <node ref="U1" pin="3"/>
+      <node ref="U2" pin="8"/>
+      <node ref="C2" pin="1"/>
+      <node ref="C1" pin="1"/>
+    </net>
+    <net code="17" name="Net-(J3-Pad3)">
+      <node ref="J3" pin="3"/>
+    </net>
+    <net code="18" name="+BATT">
+      <node ref="U5" pin="4"/>
+    </net>
+    <net code="19" name="GND">
+      <node ref="C3" pin="2"/>
+      <node ref="J1" pin="3"/>
+      <node ref="J1" pin="2"/>
+      <node ref="SW1" pin="1"/>
+      <node ref="U5" pin="7"/>
+      <node ref="U4" pin="1"/>
+      <node ref="U1" pin="2"/>
+      <node ref="J3" pin="4"/>
+      <node ref="J3" pin="2"/>
+      <node ref="U2" pin="1"/>
+      <node ref="SW3" pin="1"/>
+      <node ref="C1" pin="2"/>
+      <node ref="U3" pin="4"/>
+      <node ref="J4" pin="1"/>
+      <node ref="SW2" pin="1"/>
+    </net>
+    <net code="20" name="+5V">
+      <node ref="U4" pin="2"/>
+      <node ref="U2" pin="14"/>
+      <node ref="U2" pin="13"/>
+      <node ref="U1" pin="1"/>
+      <node ref="U5" pin="8"/>
+      <node ref="R1" pin="1"/>
+      <node ref="C3" pin="1"/>
+      <node ref="U3" pin="27"/>
+      <node ref="R2" pin="2"/>
+    </net>
+    <net code="21" name="Net-(U3-Pad28)">
+      <node ref="U3" pin="28"/>
+    </net>
+    <net code="22" name="Net-(U3-Pad29)">
+      <node ref="U3" pin="29"/>
+    </net>
+    <net code="23" name="Net-(U3-Pad3)">
+      <node ref="U3" pin="3"/>
+    </net>
+    <net code="24" name="Net-(U3-Pad30)">
+      <node ref="U3" pin="30"/>
+    </net>
+    <net code="25" name="Up">
+      <node ref="U3" pin="5"/>
+      <node ref="SW1" pin="2"/>
+    </net>
+    <net code="26" name="Mid">
+      <node ref="SW2" pin="2"/>
+      <node ref="U3" pin="6"/>
+    </net>
+    <net code="27" name="Down">
+      <node ref="SW3" pin="2"/>
+      <node ref="U3" pin="7"/>
+    </net>
+    <net code="28" name="Net-(J2-Pad1)">
+      <node ref="J2" pin="1"/>
+      <node ref="U2" pin="6"/>
+    </net>
+    <net code="29" name="Net-(J2-Pad2)">
+      <node ref="U2" pin="5"/>
+      <node ref="J2" pin="2"/>
+    </net>
+    <net code="30" name="Net-(J2-Pad3)">
+      <node ref="J2" pin="3"/>
+      <node ref="U2" pin="4"/>
+    </net>
+    <net code="31" name="Net-(J2-Pad4)">
+      <node ref="J2" pin="4"/>
+      <node ref="U2" pin="3"/>
+    </net>
+    <net code="32" name="Net-(U1-Pad4)">
+      <node ref="U1" pin="4"/>
+    </net>
+    <net code="33" name="M0">
+      <node ref="U3" pin="12"/>
+      <node ref="U2" pin="10"/>
+    </net>
+    <net code="34" name="M1">
+      <node ref="U3" pin="11"/>
+      <node ref="U2" pin="11"/>
+    </net>
+    <net code="35" name="M2">
+      <node ref="U2" pin="12"/>
+      <node ref="U3" pin="10"/>
+    </net>
+    <net code="36" name="STEP">
+      <node ref="U2" pin="15"/>
+      <node ref="U3" pin="9"/>
+    </net>
+    <net code="37" name="DIR">
+      <node ref="U2" pin="16"/>
+      <node ref="U3" pin="8"/>
+    </net>
+    <net code="38" name="Net-(U2-Pad2)">
+      <node ref="U2" pin="2"/>
+    </net>
+    <net code="39" name="ENABLE">
+      <node ref="U3" pin="14"/>
+      <node ref="U2" pin="9"/>
+    </net>
+    <net code="40" name="Net-(J3-Pad1)">
+      <node ref="R2" pin="1"/>
+      <node ref="J3" pin="1"/>
+    </net>
+    <net code="41" name="Emit">
+      <node ref="U3" pin="19"/>
+      <node ref="J3" pin="5"/>
+      <node ref="R1" pin="2"/>
+    </net>
+    <net code="42" name="Net-(U5-Pad1)">
+      <node ref="U5" pin="1"/>
+    </net>
+    <net code="43" name="Net-(U5-Pad2)">
+      <node ref="U5" pin="2"/>
+    </net>
+    <net code="44" name="Net-(U5-Pad3)">
+      <node ref="U5" pin="3"/>
+    </net>
+  </nets>
+</export>

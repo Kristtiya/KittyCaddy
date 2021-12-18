@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name KittyCaddy)(type KiCad)(uri ${KIPRJMOD}/KittyCaddy.pretty)(options "")(descr ""))
+)
