@@ -31,9 +31,6 @@ SpeedyStepper stepper;
 // -----------
 bool h12Flag;
 bool pmFlag;
-bool rotate;
-bool toggle;
-
 
 uint8_t hours;
 uint8_t minutes;
@@ -51,11 +48,9 @@ uint8_t alarm_ss;
 //   BUTTONS
 // -----------
 int hold; //Status for if menu button is held- 0: Short Press 1: Long Press
-
 int UpStatus;
 int MenuStatus;
 int DownStatus;
-
 
 // -- Debounce --
 int buttonState;             // the current reading from the input pin
@@ -64,23 +59,13 @@ int currentState;     // the current reading from the input pin
 int lastButtonState = HIGH;   // the previous reading from the input pin - starting at HIGH
 int lastFlicker = HIGH;
 unsigned long lastDebounceTime = 0;  // the last time the output pin was toggled
-unsigned long ButtonHoldTIme = 1000;    // the debounce time; increase if the output flickers
-
-const int SHORT_PRESS_TIME = 1000; // 500 milliseconds
-int lastState = HIGH;  // the previous state from the input pin
-unsigned long pressedTime  = 0;
-unsigned long releasedTime = 0;
-
+unsigned long ButtonHoldTIme = 750;    // the debounce time; increase if the output flickers
 
 // -----------
 //   GENERAL 
 // -----------
-
-//
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 bool statechange;
-
-
 int cursor;
 
 
@@ -101,6 +86,12 @@ const int SensorEmit = A0;
 // -----------
 int sensorValue = 0;        // value read from homing Sensor
 int FEEDERMODE;             // Choosing feeder mode
+int NEWMODE;
+int MODETOGGLE;
+bool changeMode;
+bool rotate;
+bool toggle;
+
 
 // -----------
 //   DISPLAY
@@ -184,9 +175,12 @@ static const unsigned char PROGMEM logo_bmp[] = {
 void setup() {
   Serial.begin(9600); //Baud Rate
   FEEDERMODE = 0;
+  MODETOGGLE = 0;
+  NEWMODE = FEEDERMODE;
   toggle = false;
   bool rotate = false;
   statechange =  false;
+  changeMode = false;
 
   // ------ Real Time Clock Setup ------
     // initializing the rtc
@@ -246,32 +240,14 @@ void loop() {
   // ----- ALARM ------
   //CheckAlarmTime(hours, minutes, seconds);      
   // ----- BUTTON STATUS -----
-  int UpStatus = digitalRead(2);
-  int DownStatus = digitalRead(4);
-  MenuStatus = ButtonControl(3);
+  int UpStatus = digitalRead(2); // Up Button
+  int DownStatus = digitalRead(4); //Down Button
+  MenuStatus = ButtonControl(3); // Menu Button
 
-//   ------ CHOOSING MODE ------
-//  if (MenuStatus == LOW && hold == 1){
-//    //Serial.print(FEEDERMODE);
-//    FEEDERMODE++;
-//    statechange = true;
-//    //Serial.print(FEEDERMODE);
-//    }if ((FEEDERMODE == 3)&&(MenuStatus == LOW)){
-//      FEEDERMODE = 0;
-//    } 
-//  if (UpStatus == HIGH) {
-//    //digitalWrite(UpButton, LOW);
-//    } else {
-//    digitalWrite(UpButton, HIGH);
-//    enableMotor();
-//  }
-  
   // ----- Display ----
   display.clearDisplay();
   MENU();
-  //Serial.print(FEEDERMODE);
   if (FEEDERMODE == 0){ //When in Feeding Mode (idle)
-    toggle = false;
     displayTime(hours, minutes, seconds);}
   if (FEEDERMODE == 1){
     setTime(hours, minutes, seconds);
@@ -294,21 +270,23 @@ int ButtonControl(int button){
         lastDebounceTime = millis(); // reset the debouncing timer
         lastFlicker = reading;
       }
-     if (reading == LOW){
+     while (reading == LOW){
       if ((millis() - lastDebounceTime) > ButtonHoldTIme) {
         if (lastButtonState == HIGH && reading == LOW) {
-          //Serial.print("Button Pressed");
           hold = 1;
           return(LOW);
         }
         else if (lastButtonState ==HIGH && reading == HIGH){
           //Serial.print("Button Released");
           lastButtonState = reading;
-          return(HIGH);
-        }
+          return(HIGH);        }
       }
       else{
-        hold = 0;}
+        hold = 0;
+        return(reading);}
+     }
+     else{
+      return(reading);
      }
 }
 
@@ -401,30 +379,93 @@ bool CheckAlarmTime(uint8_t hh, uint8_t mm, uint8_t ss, uint8_t alarm_hh, uint8_
 
 
 // --------------- MENU ---------------
+// The Menu function determines what is being displayed on screen. It also takes in user input to change mode.
 void MENU(){
-  char *MODES[] = {"FEEDING MODE","CHANGE TIME","SET ALARM"};
-  display.drawBitmap(0,0,logo_bmp,128,64,SSD1306_WHITE);
-  display.setTextSize(1); // Draw 2X-scale text
-  display.setCursor(40, 10);
-  display.setTextColor(SSD1306_WHITE);
-  if (statechange = true){
-    display.clearDisplay();
-    display.drawBitmap(0,0,logo_bmp,128,64,SSD1306_WHITE);
-    display.setCursor(40, 10);
-    display.println(MODES[FEEDERMODE]);
+  char *MODES[] = {"FEEDING MODE","CHANGE TIME","SET ALARM"}; //Current Mode
+  // - BITMAP
+  display.drawBitmap(0,0,logo_bmp,128,64,SSD1306_WHITE); // Draws bitmap border
+  display.setTextSize(1); // Draw 2X-scale text 
+  display.setCursor(40, 10); // Move cursor
+  display.setTextColor(SSD1306_WHITE); // Select text color
+
+  // - REREAD BUTTONS - for some reason, the button input read in the loop does not maintain its value in the MENU()
+  // The solution was to reread the button inputs. This likely slows down the code by a little and is redundant. It
+  // is a quick fix
+  
+  int UpStatus = digitalRead(2); // Up Button
+  int DownStatus = digitalRead(4); //Down Button
+  
+  if (MenuStatus == LOW && hold == 1){  // Toggle between Current mode and changemode
+    MODETOGGLE++;
+  }
+  if (MODETOGGLE >= 3){ //If mode toggle is 3 or greater, reset to 0
+    MODETOGGLE = 0;
+  }
+    if (NEWMODE >= 3){ //If mode toggle is 3 or greater, reset to 0
+    NEWMODE = 0;
+    }if (NEWMODE < 0){
+      NEWMODE = 3;
+    }
+
+  if (MODETOGGLE == 1){ // MODE SELECTION SCREEN
+    display.clearDisplay(); // Clear Display
+    display.drawBitmap(0,0,logo_bmp,128,64,SSD1306_WHITE); //Draw Bitmap
     display.setTextColor(BLACK, WHITE); //Invert Color
-    display.println(MODES[FEEDERMODE]);
-    display.clearDisplay();
-    display.setTextColor(SSD1306_WHITE);
-    display.drawBitmap(0,0,logo_bmp,128,64,SSD1306_WHITE);
-    display.setCursor(40, 10);
-    display.println(MODES[FEEDERMODE]); //Display Current Feeder Mode
-    statechange = false;
-  }else{
-    statechange = false;
+    display.setCursor(40, 10); // Cursor for 
+    display.println(MODES[NEWMODE]);
+
+    if(UpStatus == 0){
+      NEWMODE++;
+    }
+    if(DownStatus == 0){
+      NEWMODE--;
+    }
+  }
+      if (MODETOGGLE == 2){
+      FEEDERMODE = NEWMODE;
+      MODETOGGLE++;
+    }
+  else{
+    display.setTextColor(SSD1306_WHITE); // Select text color
     display.println(MODES[FEEDERMODE]);
   }}
- 
+
+//void displayTime(uint8_t hh, uint8_t mm, uint8_t ss){
+//char h[3];
+//char m[3];
+//char s[3];
+//
+//  char *AmPm;
+//  if (hh <= 12)
+//    AmPm = "AM";
+//  else
+//    AmPm = "PM";
+//
+//  if (hh >= 13)
+//    hh = hh - 12;
+//    
+//  display.setTextColor(SSD1306_WHITE);
+//  //Print Time to list
+//  sprintf(h, "%02d:", hh);
+//  sprintf(m, "%02d", mm);
+//  sprintf(s, "%02d", ss);
+//
+//      // Display Hours and Minutes
+//        display.setTextColor(SSD1306_WHITE);
+//        display.setTextSize(2); // Draw 2X-scale text
+//        display.setCursor(40, 30);
+//        display.println(h);
+//        display.setCursor(75, 30);
+//        display.println(m);
+//      
+//      // Display Seconds
+//        display.setCursor(105, 37);
+//        display.setTextSize(1);
+//        display.println(s);
+//        display.setCursor(105, 29);
+//        display.println(AmPm);
+//}
+
 // ------ SET TIME ------
 uint8_t setTime(uint8_t new_hours, uint8_t new_minutes, uint8_t new_seconds){
   cursor = 0;
@@ -463,7 +504,6 @@ uint8_t setTime(uint8_t new_hours, uint8_t new_minutes, uint8_t new_seconds){
 
 
 // ----------- Display Copyright ------------------
-// 
 void CompanyIntro(void){
   //display.clearDisplay();
   display.setTextSize(1); // Draw 2X-scale text
