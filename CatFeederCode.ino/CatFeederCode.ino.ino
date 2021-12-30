@@ -60,7 +60,7 @@ int currentState;     // the current reading from the input pin
 int lastButtonState = HIGH;   // the previous reading from the input pin - starting at HIGH
 int lastFlicker = HIGH;
 unsigned long lastDebounceTime = 0;  // the last time the output pin was toggled
-unsigned long ButtonHoldTIme = 750;    // the debounce time; increase if the output flickers
+unsigned long ButtonHoldTIme = 50;    // the debounce time; increase if the output flickers
 
 // -----------
 //   GENERAL 
@@ -512,21 +512,6 @@ void setTime(uint8_t new_hours, uint8_t new_minutes, uint8_t new_seconds){
       display.display();  
 
       if(CURSORACTIVE == true){
-        if(hours == 24 && UpStatus == 0 || hours >= 25){
-          hours = 1;
-        }else if(hours == 1 && DownStatus == 0){
-          hours = 24;
-        }
-        if(minutes == 59 && UpStatus == 0){
-          minutes = 0;
-        }else if(minutes == 0 && DownStatus == 0){
-          minutes = 59;
-        }
-        if(seconds == 59 && UpStatus == 0){
-          seconds = 0;
-        }else if(seconds == 0 && DownStatus == 0){
-          seconds = 59;
-        }
             int UpStatus = digitalRead(2); // Up Button
             int DownStatus = digitalRead(4); //Down Button 
             MenuStatus = ButtonControl(3); // Menu Button
@@ -535,21 +520,32 @@ void setTime(uint8_t new_hours, uint8_t new_minutes, uint8_t new_seconds){
             }
             // --CHOOSING HOUR
             if(clock_cursor == 0){
-              Serial.print(new_hours);
+              if(new_hours >= 25 && UpStatus == 0){
+                new_hours = 1;}
+              else if(new_hours == 1 && DownStatus == 0){
+                new_hours = 24;}
               if(UpStatus == 0){ 
-                new_hours++;
-                }
+                new_hours++;}
               if(DownStatus == 0){
-                new_hours--;}
-            }
+                new_hours--;}}
+            
             // --CHOOSING MINUTE
             if(clock_cursor == 1){ 
+              if(new_minutes == 59 && UpStatus == 0){
+                new_minutes = 0;}
+              else if(new_minutes == 0 && DownStatus == 0){
+                new_minutes = 59;}
               if(UpStatus == 0){
                 new_minutes++;}
                 if(DownStatus == 0){
                 new_minutes--;}}
+                
             // -- CHOOSING SECOND
             if(clock_cursor == 2){ 
+              if(new_seconds == 59 && UpStatus == 0){
+                new_seconds = 0;}
+              else if(new_seconds == 0 && DownStatus == 0){
+                new_seconds = 59;}
               if(UpStatus == 0){
                 new_seconds++;}
                 if(DownStatus == 0){
@@ -578,30 +574,20 @@ void setAlarm(uint8_t alarm_hh, uint8_t alarm_mm, uint8_t alarm_ss){
       MENU();
       display.display();  
       if(CURSORACTIVE == true){
-        if(hours == 24 && UpStatus == 0){
-          hours = 1;
-        }else if(hours == 1 && DownStatus == 0){
-          hours = 24;
-        }
-        if(minutes == 59 && UpStatus == 0){
-          minutes = 0;
-        }else if(minutes == 0 && DownStatus == 0){
-          minutes = 59;
-        }
-        if(seconds == 59 && UpStatus == 0){
-          seconds = 0;
-        }else if(seconds == 0 && DownStatus == 0){
-          seconds = 59;
-        }
             int UpStatus = digitalRead(2); // Up Button
             int DownStatus = digitalRead(4); //Down Button 
             MenuStatus = ButtonControl(3); // Menu Button
-            
             if (MenuStatus == LOW){ //Cursor Control
               clock_cursor= clock_cursor + 1;}
             
             // --CHOOSING HOUR
             if(clock_cursor == 0){
+              if(alarm_hh == 24 && UpStatus == 0){
+              alarm_hh = 1;
+              }
+              else if(alarm_hh == 1 && DownStatus == 0){
+              alarm_hh = 24;
+              }
               if(UpStatus == 0){ 
                 alarm_hh++;}
               if(DownStatus == 0){
@@ -609,6 +595,11 @@ void setAlarm(uint8_t alarm_hh, uint8_t alarm_mm, uint8_t alarm_ss){
                 
             // --CHOOSING MINUTE
             if(clock_cursor == 1){ 
+              if(alarm_mm == 59 && UpStatus == 0){
+                alarm_mm = 0;}
+              else if(alarm_mm == 0 && DownStatus == 0){
+                alarm_mm = 59;
+              }
               if(UpStatus == 0){
                 alarm_mm++;}
                 if(DownStatus == 0){
@@ -616,6 +607,10 @@ void setAlarm(uint8_t alarm_hh, uint8_t alarm_mm, uint8_t alarm_ss){
             
             // -- CHOOSING SECOND
             if(clock_cursor == 2){ 
+              if(alarm_ss == 59 && UpStatus == 0){
+                alarm_ss = 0;}
+              else if(alarm_ss == 0 && DownStatus == 0){
+                alarm_ss = 59;}
               if(UpStatus == 0){
                 alarm_ss++;}
                 if(DownStatus == 0){
