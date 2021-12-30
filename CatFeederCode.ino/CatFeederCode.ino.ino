@@ -32,6 +32,7 @@ SpeedyStepper stepper;
 // -----------
 bool h12Flag;
 bool pmFlag;
+bool ALARM;
 
 uint8_t hours;
 uint8_t minutes;
@@ -92,7 +93,8 @@ int MODETOGGLE;
 bool CURSORACTIVE;
 bool changeMode;
 bool rotate;
-bool toggle;
+bool stopFlag;
+
 
 
 // -----------
@@ -176,22 +178,23 @@ static const unsigned char PROGMEM logo_bmp[] = {
 
 void setup() {
   Serial.begin(9600); //Baud Rate
-
+  stopFlag = true;
   // -- Setting up variables
-  CURSORACTIVE = 0;
+  CURSORACTIVE = 0; //Make clock cursor active
+  clock_cursor = 0; //Set cursor for clock to 0
+  
   new_hours = 0;
   new_minutes = 0;
   new_seconds = 0;
 
-    uint8_t alarm_hh = EEPROM.read(1);
-    uint8_t alarm_mm = EEPROM.read(2);
-    uint8_t alarm_ss = EEPROM.read(3);
+//  uint8_t alarm_hh = EEPROM.read(1);
+//  uint8_t alarm_mm = EEPROM.read(2);
+//  uint8_t alarm_ss = EEPROM.read(3);
   
-  clock_cursor = 0; //Set cursor for clock to 0
-  FEEDERMODE = 0;
-  MODETOGGLE = 0;
-  NEWMODE = FEEDERMODE;
-  toggle = false;
+  FEEDERMODE = 0; //Puts feeder in FEED mode
+  MODETOGGLE = 0; // Puts feeder in IDLE mode
+  NEWMODE = FEEDERMODE; // When feeder moves to TOGGLE mode, first mode will be FEED
+
   bool rotate = false;
   statechange =  false;
   changeMode = false;
@@ -224,19 +227,19 @@ void setup() {
   // Connect and configure stepper motor
   stepper.connectToPins(MOTOR_STEP_PIN, MOTOR_DIRECTION_PIN);
   pinMode(M0Pin, LOW);
-  pinMode(M1Pin, HIGH);
+  pinMode(M1Pin, LOW);
   pinMode(M2Pin, HIGH);
    
   // ------ VISUALS FOR DISPLAY ------- //
-  // Display Company Logo
-//  CompanyIntro(); 
-//  // Invert and restore display, pausing in-between
-//  display.invertDisplay(true);
-//  delay(1000);
-//  display.invertDisplay(false);
-//  delay(1000);
-//  display.clearDisplay();
-//  display.display();
+   //Display Company Logo
+  CompanyIntro(); 
+  // Invert and restore display, pausing in-between
+  display.invertDisplay(true);
+  delay(1000);
+  display.invertDisplay(false);
+  delay(1000);
+  display.clearDisplay();
+  display.display();
 }
 
 // |----------------------------------------------|
@@ -249,15 +252,23 @@ void loop() {
   seconds = now.second(); // Current Seconds
   minutes = now.minute(); // Current Minutes
   hours = now.hour(); // Current Hour
- 
+  
+  uint8_t alarm_hh = EEPROM.read(1);
+  uint8_t alarm_mm = EEPROM.read(2);
+  uint8_t alarm_ss = EEPROM.read(3);
+  //enableMotor();
   // ----- ALARM ------
-  //CheckAlarmTime(hours, minutes, seconds);      
+  //bool ALARM = CheckAlarmTime(hours, minutes, seconds);      
+   if((hours == alarm_hh) && (minutes == alarm_mm) && (seconds == alarm_ss)){
+      Serial.print("Alarm");
+      enableMotor();
+    }
   // ----- BUTTON STATUS -----
-  int UpStatus = digitalRead(2); // Up Button
-  int DownStatus = digitalRead(4); //Down Button
+  UpStatus = ButtonControl(2); //Up Button
+  DownStatus = ButtonControl(4); // Down Button
   MenuStatus = ButtonControl(3); // Menu Button
 
-  // ----- Display ----
+  // ----- DISPLAY ----
   display.clearDisplay();
   MENU();
   if (FEEDERMODE == 0){ //When in Feeding Mode (idle)
@@ -268,10 +279,7 @@ void loop() {
     }
   if(FEEDERMODE == 2){
     CURSORACTIVE = true;
-    uint8_t alarm_hh = EEPROM.read(1);
-    uint8_t alarm_mm = EEPROM.read(2);
-    uint8_t alarm_ss = EEPROM.read(3);
-    setAlarm(alarm_hh, alarm_mm, alarm_ss);
+    setAlarm();
   }
   display.display();  
 }
@@ -280,38 +288,8 @@ void loop() {
 // |                 FUNCTIONS                   |
 // |---------------------------------------------|
 
-// ----- DEBOUNCE BUTTON ----
-//int ButtonControl(int button){
-//     hold = 0;
-//     int reading = digitalRead(button);
-//      if (reading != lastFlicker) {
-//        lastDebounceTime = millis(); // reset the debouncing timer
-//        lastFlicker = reading;
-//      }
-//     if (reading == LOW){
-//      if ((millis() - lastDebounceTime) > ButtonHoldTIme) {
-//        if (lastButtonState == HIGH && reading == LOW) {
-//          hold = 0;
-//          return(LOW);
-//        }
-//        else if (lastButtonState ==HIGH && reading == HIGH){
-//          //Serial.print("Button Released");
-//          lastButtonState = reading;
-//          return(HIGH);
-//          delay(100);
-//        }
-//      }
-//      else{
-//        hold = 0;
-//        return(reading);}
-//     }
-//     else{
-//      return(reading);
-//     }
-//}
-
 int ButtonControl(int button){
-     hold = 0;
+     
      int reading = digitalRead(button);
       if (reading != lastFlicker) {
         lastDebounceTime = millis(); // reset the debouncing timer
@@ -320,7 +298,7 @@ int ButtonControl(int button){
      //if (reading == LOW){
       if ((millis() - lastDebounceTime) > ButtonHoldTIme) {
         if (lastButtonState == LOW) {
-          hold = 0;
+          
           return(LOW);}
           if(lastButtonState != reading){
           //Serial.print("Button Released");
@@ -427,42 +405,20 @@ char s[3];
       
 }
 
-// ----------- Sensor ------------------
-// Used to read the homing sensor and determine if above home or not
-void SensorCheck(){
-    Serial.print("sensor = ");
-    Serial.print(sensorValue);
-      if (sensorValue > 500) { 
-            stepper.setSpeedInStepsPerSecond(200);
-            stepper.setAccelerationInStepsPerSecondPerSecond(50);
-            stepper.moveRelativeInSteps(1000);
-            }else {
-        stepper.setSpeedInStepsPerSecond(0);      
-        stepper.setAccelerationInStepsPerSecondPerSecond(0);
-      }
-}
-
 // ----------- MOTOR ------------------
 // Used to rotate the motor to the next home point
 void enableMotor(){
-  stepper.setSpeedInStepsPerSecond(90);
-  stepper.setAccelerationInStepsPerSecondPerSecond(100);
-  stepper.setCurrentPositionInSteps(0);
-  stepper.moveRelativeInSteps(20);
   bool stopFlag = false;
- stepper.setupMoveInSteps(2000);
+  stepper.setSpeedInStepsPerSecond(200);
+  stepper.setAccelerationInStepsPerSecondPerSecond(200);
+  stepper.setCurrentPositionInSteps(0);
+  stepper.moveRelativeInSteps(50);
+  stepper.setupMoveInSteps(2000);
   while(!stepper.motionComplete())
   {
     stepper.processMovement();
     sensorValue = analogRead(SensorEmit);
-    display.clearDisplay();
-    MENU();
-    display.setTextColor(SSD1306_WHITE);
-    display.setTextSize(2); // Draw 2X-scale text
-    display.setCursor(40, 30);
-    display.println("Rotating Motor");
-
-    if ((sensorValue < 500) && (stopFlag == false))
+    if ((sensorValue < 500))
     {
       stepper.setupStop();
       stopFlag = true;
@@ -470,18 +426,12 @@ void enableMotor(){
   }
 }
 
-// ----- ALARM -----
-// Used for a state change- determines if current time matches alarm
-bool CheckAlarmTime(uint8_t hh, uint8_t mm, uint8_t ss, uint8_t alarm_hh, uint8_t alarm_mm, uint8_t alarm_ss){
-  if((hh == alarm_hh) && (mm == alarm_mm) && (ss == alarm_ss)){
-    enableMotor();
-  }}
+
 
 // --------------- MENU ---------------
 // The Menu function determines what is being displayed on screen. It also takes in user input to change mode.
 void MENU(){
   char *MODES[] = {"FEEDING MODE","CHANGE TIME","SET ALARM"}; //Current Mode
-  // - BITMAP
   display.drawBitmap(0,0,logo_bmp,128,64,SSD1306_WHITE); // Draws bitmap border
   display.setTextSize(1); // Draw 2X-scale text 
   display.setCursor(40, 10); // Move cursor
@@ -490,42 +440,42 @@ void MENU(){
   // - REREAD BUTTONS - for some reason, the button input read in the loop does not maintain its value in the MENU()
   // The solution was to reread the button inputs. This likely slows down the code by a little and is redundant. It
   // is a quick fix
-  
-  int UpStatus = digitalRead(2); // Up Button
-  int DownStatus = digitalRead(4); //Down Button
-  if(CURSORACTIVE == false){
-    
-  }
-  if (MenuStatus == LOW && hold == 0 && CURSORACTIVE == false){  // Toggle between Current mode and changemode
-    MODETOGGLE++;}
-  if (MODETOGGLE >= 3){ //If mode toggle is 3 or greater, reset to 0
-    MODETOGGLE = 0;}
-    if (NEWMODE >= 3){ //If mode toggle is 3 or greater, reset to 0
-    NEWMODE = 0;}
-    if (NEWMODE < 0){
-    NEWMODE = 3;}
-    
-  if (MODETOGGLE == 1 && CURSORACTIVE == false){ // MODE SELECTION SCREEN
-    display.clearDisplay(); // Clear Display
-    display.drawBitmap(0,0,logo_bmp,128,64,SSD1306_WHITE); //Draw Bitmap
-    display.setTextColor(BLACK, WHITE); //Invert Color
-    display.setCursor(40, 10); // Cursor for 
-    display.println(MODES[NEWMODE]);
-
-    if(UpStatus == 0 ){
-      NEWMODE++;
-    }
-    if(DownStatus == 0){
-      NEWMODE--;
-    }
-  }
-      if (MODETOGGLE == 2 && CURSORACTIVE == false){
-      FEEDERMODE = NEWMODE;
-      MODETOGGLE++;}
-  else{
-    display.setTextColor(SSD1306_WHITE); // Select text color
-    display.println(MODES[FEEDERMODE]);
-  }}
+  int UpStatus = ButtonControl(2); //Up Button
+  int DownStatus = ButtonControl(4); // Down Button
+   // -- CURSOR VALUE CONTROL
+        if (MenuStatus == LOW && hold == 0 && CURSORACTIVE == false){  // Toggle between Current mode and changemode
+          MODETOGGLE++;}
+        if (MODETOGGLE >= 3){ //If mode toggle is 3 or greater, reset to 0
+          MODETOGGLE = 0;}
+          if (NEWMODE >= 3){ //If mode toggle is 3 or greater, reset to 0
+          NEWMODE = 0;}
+          if (NEWMODE < 0){
+          NEWMODE = 3;}
+          
+        // -- MODE SELECTION SCREEN
+        if (MODETOGGLE == 1 && CURSORACTIVE == false){ 
+          display.clearDisplay(); // Clear Display
+          display.drawBitmap(0,0,logo_bmp,128,64,SSD1306_WHITE); //Draw Bitmap
+          display.setTextColor(BLACK, WHITE); //Invert Color
+          display.setCursor(40, 10); // Cursor for 
+          display.println(MODES[NEWMODE]);
+          if(UpStatus == 0 ){
+            NEWMODE++;}
+          if(DownStatus == 0){
+            NEWMODE--;}
+        }
+        // -- MODE SELECT
+        if (MODETOGGLE == 2 && CURSORACTIVE == false){
+          FEEDERMODE = NEWMODE;
+          MODETOGGLE++;}
+        if (stopFlag == false){
+          display.clearDisplay(); // Clear Display
+          display.drawBitmap(0,0,logo_bmp,128,64,SSD1306_WHITE); //Draw Bitmap
+        }
+        else{ // If else, display current mode
+        display.setTextColor(SSD1306_WHITE); // Select text color
+        display.println(MODES[FEEDERMODE]);}
+  }// -- ENG OF FUNCTION
 
 // ------ SET TIME ------
 void setTime(uint8_t new_hours, uint8_t new_minutes, uint8_t new_seconds){
@@ -537,12 +487,14 @@ void setTime(uint8_t new_hours, uint8_t new_minutes, uint8_t new_seconds){
       display.display();  
 
       if(CURSORACTIVE == true){
-            int UpStatus = digitalRead(2); // Up Button
-            int DownStatus = digitalRead(4); //Down Button 
-            MenuStatus = ButtonControl(3); // Menu Button
-            if (MenuStatus == LOW){ //Cursor Control
-              clock_cursor= clock_cursor + 1;
-            }
+          int DownStatus = ButtonControl(4); // Down Button
+          int UpStatus = ButtonControl(2); // Up Button
+          MenuStatus = ButtonControl(3); // Menu Button
+
+            // -- CURSOR CONTROL --
+            if (MenuStatus == LOW){ 
+              clock_cursor= clock_cursor + 1;}
+              
             // --CHOOSING HOUR
             if(clock_cursor == 0){
               if(new_hours >= 25 && UpStatus == 0){
@@ -574,11 +526,9 @@ void setTime(uint8_t new_hours, uint8_t new_minutes, uint8_t new_seconds){
               if(UpStatus == 0){
                 new_seconds++;}
                 if(DownStatus == 0){
-                new_seconds--;}
-          }
-          // -- END OF CURSOR LOOP
+                new_seconds--;}}
+                
           // Once reached, set the new time on the clock, return new time values, and escape while loop
-          
           if(clock_cursor == 3){
             MENU();
             CURSORACTIVE = false; //Disable cursor
@@ -592,20 +542,26 @@ void setTime(uint8_t new_hours, uint8_t new_minutes, uint8_t new_seconds){
 
 // ------ SET ALARM ------
 // Set the alarm time. Saves time to memory so if power goes out for a few seconds, alarm time is retained.
-void setAlarm(uint8_t alarm_hh, uint8_t alarm_mm, uint8_t alarm_ss){
-  while(FEEDERMODE == 2){
+void setAlarm(){
+  //-- Obtain Current Alarm time from EEPROM
+    uint8_t alarm_hh = EEPROM.read(1);
+    uint8_t alarm_mm = EEPROM.read(2);
+    uint8_t alarm_ss = EEPROM.read(3);
+  while(FEEDERMODE == 2){ //While feedermode is in ALARM SET MODE
       display.clearDisplay();
-      displayTime(alarm_hh, alarm_mm, alarm_ss);
-      MENU();
+      displayTime(alarm_hh, alarm_mm, alarm_ss); //Display current Alarm time
+      MENU(); 
       display.display();  
       if(CURSORACTIVE == true){
-            int UpStatus = digitalRead(2); // Up Button
-            int DownStatus = digitalRead(4); //Down Button 
-            MenuStatus = ButtonControl(3); // Menu Button
-            if (MenuStatus == LOW){ //Cursor Control
-              clock_cursor= clock_cursor + 1;}
+          int DownStatus = ButtonControl(4);    // Down Button
+          int UpStatus = ButtonControl(2);      // Up Button
+          MenuStatus = ButtonControl(3);        // Menu Button
+
+            // -- CURSOR CONTROL --
+            if (MenuStatus == LOW){             
+              clock_cursor= clock_cursor + 1;}  
             
-            // --CHOOSING HOUR
+            // --CHOOSING HOUR --
             if(clock_cursor == 0){
               if(alarm_hh == 24 && UpStatus == 0){
               alarm_hh = 1;
@@ -644,6 +600,7 @@ void setAlarm(uint8_t alarm_hh, uint8_t alarm_mm, uint8_t alarm_ss){
           // Once reached, set the new time on the clock, return new time values, and escape while loop
           if(clock_cursor == 3){
             MENU();
+            // Save new alarm time to memory
             EEPROM.write(1, alarm_hh);
             EEPROM.write(2, alarm_mm);
             EEPROM.write(3, alarm_ss);
@@ -654,22 +611,73 @@ void setAlarm(uint8_t alarm_hh, uint8_t alarm_mm, uint8_t alarm_ss){
           }// -- END OF CURSOR LOOP
         }// -- END OF WHILE LOOP
       }// -- ENG OF FUNCTION
+      
 // ----------- Display Copyright ------------------
 void CompanyIntro(void){
-  //display.clearDisplay();
+  display.clearDisplay();
   display.setTextSize(1); // Draw 2X-scale text
-  display.setTextColor(SSD1306_WHITE);
-  display.setCursor(0, 0);
+  display.setTextColor(SSD1306_WHITE); // Text color to white
+  display.setCursor(0, 0); // Cursor to 0,0
   display.println(F("(c) Kristtiya Guerra & Co."));
   display.display();      // Show initial text
   delay(100);
-  display.startscrollright(0x00, 0x1F);
+  display.startscrollright(0x00, 0x1F); //Scroll Text
   delay(2000);
   display.stopscroll();
 }
 
 
+// OLD FUNCTIONS
+// ----- HOLD BUTTON ----
+//int ButtonControl(int button){
+//     
+//     int reading = digitalRead(button);
+//      if (reading != lastFlicker) {
+//        lastDebounceTime = millis(); // reset the debouncing timer
+//        lastFlicker = reading;
+//      }
+//     if (reading == LOW){
+//      if ((millis() - lastDebounceTime) > ButtonHoldTIme) {
+//        if (lastButtonState == HIGH && reading == LOW) {
+//          
+//          return(LOW);
+//        }
+//        else if (lastButtonState ==HIGH && reading == HIGH){
+//          //Serial.print("Button Released");
+//          lastButtonState = reading;
+//          return(HIGH);
+//          delay(100);
+//        }
+//      }
+//      else{
+//        
+//        return(reading);}
+//     }
+//     else{
+//      return(reading);
+//     }
+//}
 
-// seconds = (millis() / 1000) % 60; // convert to seconds, then modulo divide to 0-59 range
-// minutes = (millis() /1000 / 60) % 60; // Gives int number of minutes since start - 0-59
-// hours = (millis() /1000 / 3600) % 24; // Gives int number of hourse since start- 0-23
+// ----------- Sensor ------------------
+// Used to read the homing sensor and determine if above home or not
+//void SensorCheck(){
+//    Serial.print("sensor = ");
+//    Serial.print(sensorValue);
+//      if (sensorValue > 500) { 
+//            stepper.setSpeedInStepsPerSecond(200);
+//            stepper.setAccelerationInStepsPerSecondPerSecond(50);
+//            stepper.moveRelativeInSteps(1000);
+//            }else {
+//        stepper.setSpeedInStepsPerSecond(0);      
+//        stepper.setAccelerationInStepsPerSecondPerSecond(0);
+//      }
+//}
+
+// ----- ALARM -----
+// Used for a state change- determines if current time matches alarm
+//bool CheckAlarmTime(uint8_t hh, uint8_t mm, uint8_t ss){
+//    if((hh == alarm_hh) && (mm == alarm_mm) && (ss == alarm_ss)){
+//      Serial.print("Alarm");
+//      //enableMotor();
+//    }
+//  } //-- END OF FUNCTION
