@@ -281,34 +281,59 @@ void loop() {
 // |---------------------------------------------|
 
 // ----- DEBOUNCE BUTTON ----
+//int ButtonControl(int button){
+//     hold = 0;
+//     int reading = digitalRead(button);
+//      if (reading != lastFlicker) {
+//        lastDebounceTime = millis(); // reset the debouncing timer
+//        lastFlicker = reading;
+//      }
+//     if (reading == LOW){
+//      if ((millis() - lastDebounceTime) > ButtonHoldTIme) {
+//        if (lastButtonState == HIGH && reading == LOW) {
+//          hold = 0;
+//          return(LOW);
+//        }
+//        else if (lastButtonState ==HIGH && reading == HIGH){
+//          //Serial.print("Button Released");
+//          lastButtonState = reading;
+//          return(HIGH);
+//          delay(100);
+//        }
+//      }
+//      else{
+//        hold = 0;
+//        return(reading);}
+//     }
+//     else{
+//      return(reading);
+//     }
+//}
+
 int ButtonControl(int button){
      hold = 0;
      int reading = digitalRead(button);
       if (reading != lastFlicker) {
         lastDebounceTime = millis(); // reset the debouncing timer
-        lastFlicker = reading;
+        //lastFlicker = reading;
       }
-     if (reading == LOW){
+     //if (reading == LOW){
       if ((millis() - lastDebounceTime) > ButtonHoldTIme) {
-        if (lastButtonState == HIGH && reading == LOW) {
-          hold = 1;
-          return(LOW);
-        }
-        else if (lastButtonState ==HIGH && reading == HIGH){
+        if (lastButtonState == LOW) {
+          hold = 0;
+          return(LOW);}
+          if(lastButtonState != reading){
           //Serial.print("Button Released");
           lastButtonState = reading;
           return(HIGH);
           delay(100);
         }
-      }
-      else{
-        hold = 0;
-        return(reading);}
-     }
-     else{
+
+        }     else{
       return(reading);
      }
-}
+      }
+
 
 // ----------- Display Time ------------------
 // Used to display a time value by taking 3 inputs, hh: hours, mm: minutes, ss: seconds
@@ -561,9 +586,9 @@ void setTime(uint8_t new_hours, uint8_t new_minutes, uint8_t new_seconds){
             MODETOGGLE = 0; // Get out of toggle mode
             FEEDERMODE = 0; //Return to feeder mode
             rtc.adjust(DateTime(2021, 12, 29, new_hours, new_minutes, new_seconds));}
-          }
-  }
-      }     
+          }// -- END OF CURSOR LOOP
+        }// -- END OF WHILE LOOP
+      }// -- ENG OF FUNCTION
 
 // ------ SET ALARM ------
 // Set the alarm time. Saves time to memory so if power goes out for a few seconds, alarm time is retained.
